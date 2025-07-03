@@ -43,6 +43,7 @@ const settingsCategories = [
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const [activeCategory, setActiveCategory] = useState("general");
   const [customInstructions, setCustomInstructions] = useState(true);
+  const [customInstructionsText, setCustomInstructionsText] = useState("");
   const [chatNotifications, setChatNotifications] = useState(true);
   const [systemUpdates, setSystemUpdates] = useState(false);
   const [referenceMemories, setReferenceMemories] = useState(true);
@@ -63,24 +64,6 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
               <h3 className="text-lg font-semibold mb-4">General Settings</h3>
               
               <div className="space-y-6">
-                <div className="flex items-center justify-between py-3">
-                  <div className="space-y-1">
-                    <p className="font-medium">Custom instructions</p>
-                    <p className="text-sm text-muted-foreground">
-                      Customize how the AI responds to you
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">
-                      {customInstructions ? "On" : "Off"}
-                    </span>
-                    <Switch 
-                      checked={customInstructions} 
-                      onCheckedChange={setCustomInstructions}
-                    />
-                  </div>
-                </div>
-
                 <div className="border-t pt-6">
                   <h4 className="font-medium mb-4">Theme</h4>
                   <Select defaultValue="system">
@@ -161,6 +144,34 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
               </p>
               
               <div className="space-y-6">
+                {/* Custom Instructions Section */}
+                <div className="space-y-4 pb-6 border-b">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <h4 className="font-medium">Custom instructions</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Customize how the AI responds to you
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={customInstructions} 
+                      onCheckedChange={setCustomInstructions}
+                    />
+                  </div>
+                  
+                  {customInstructions && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Custom prompt</label>
+                      <Textarea 
+                        placeholder="e.g., Straight To The Point, Value Provider, No BS. Take a forward-thinking view. You're not a hypeman..."
+                        value={customInstructionsText}
+                        onChange={(e) => setCustomInstructionsText(e.target.value)}
+                        className="min-h-32"
+                      />
+                    </div>
+                  )}
+                </div>
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">What should Local AI call you?</label>
                   <Input 

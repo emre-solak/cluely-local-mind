@@ -1,12 +1,9 @@
+
 import { useState } from "react";
 import { 
   MessageSquare, 
   Plus, 
-  Upload, 
   Settings, 
-  Trash2,
-  MoreHorizontal,
-  Edit2,
   PanelLeft
 } from "lucide-react";
 import {
@@ -26,12 +23,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { FileUploadZone } from "./FileUploadZone";
 
 interface Chat {
@@ -89,93 +80,65 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
   };
 
   return (
-    <Sidebar className={isCollapsed ? "w-14" : "w-80"} collapsible="icon">
-      <SidebarHeader className="border-b border-border">
-        <div className="flex items-center justify-between p-2">
-          <SidebarTrigger className="h-8 w-8 hover:bg-primary/10" />
+    <Sidebar className={isCollapsed ? "w-12" : "w-64"} collapsible="icon">
+      <SidebarHeader className="p-3 border-b">
+        <div className="flex items-center gap-2">
+          <SidebarTrigger className="h-6 w-6" />
           {!isCollapsed && (
-            <h1 className="text-lg font-semibold text-foreground">Local AI</h1>
+            <h1 className="text-sm font-semibold">Local AI</h1>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
-        {/* New Chat Button - Always visible */}
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={onNewChat}
-                  className="flex items-center gap-2 p-2 w-full justify-center"
-                >
-                  <Plus className="w-4 h-4" />
-                  {!isCollapsed && <span>New Chat</span>}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+      <SidebarContent className="p-2">
+        {/* New Chat Button */}
+        <div className="mb-3">
+          <Button
+            onClick={onNewChat}
+            className="w-full h-8 text-sm"
+            size="sm"
+          >
+            <Plus className="w-3 h-3" />
+            {!isCollapsed && <span className="ml-1">New Chat</span>}
+          </Button>
+        </div>
 
-        {/* Chats Section - Hidden when collapsed */}
+        {/* Chat History */}
         {!isCollapsed && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Conversations</SidebarGroupLabel>
+          <SidebarGroup className="p-0">
+            <SidebarGroupLabel className="text-xs px-2 mb-2">
+              Recent Chats
+            </SidebarGroupLabel>
             
             <SidebarGroupContent>
-              <ScrollArea className="h-64">
-                <SidebarMenu>
+              <ScrollArea className="h-48">
+                <SidebarMenu className="space-y-1">
                   {chats.map((chat) => (
-                  <SidebarMenuItem key={chat.id}>
-                    <div className="group/menu-item relative">
+                    <SidebarMenuItem key={chat.id}>
                       <SidebarMenuButton
                         isActive={currentChatId === chat.id}
                         onClick={() => onChatSelect(chat.id)}
-                        className="flex items-center gap-2 p-2 w-full"
+                        className="p-2 h-auto"
                       >
-                        <MessageSquare className="w-4 h-4 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium truncate">
+                        <MessageSquare className="w-3 h-3 flex-shrink-0" />
+                        <div className="flex-1 min-w-0 text-left">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-medium truncate">
                               {chat.title}
                             </span>
-                            <span className="text-xs text-muted-foreground ml-2">
+                            <span className="text-xs text-muted-foreground">
                               {formatTimestamp(chat.timestamp)}
                             </span>
                           </div>
                           <p className="text-xs text-muted-foreground truncate">
                             {chat.lastMessage}
                           </p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="secondary" className="text-xs">
-                              {chat.messageCount} messages
-                            </Badge>
-                          </div>
+                          <Badge variant="secondary" className="text-xs mt-1">
+                            {chat.messageCount}
+                          </Badge>
                         </div>
                       </SidebarMenuButton>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="absolute right-1 top-1 h-6 w-6 p-0 opacity-0 group-hover/menu-item:opacity-100"
-                          >
-                            <MoreHorizontal className="w-3 h-3" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-background border">
-                          <DropdownMenuItem>
-                            <Edit2 className="w-4 h-4 mr-2" />
-                            Rename
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </SidebarMenuItem>
+                    </SidebarMenuItem>
                   ))}
                 </SidebarMenu>
               </ScrollArea>
@@ -183,26 +146,26 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
           </SidebarGroup>
         )}
 
-        {/* Knowledge Base Section - Hidden when collapsed */}
+        {/* Knowledge Base */}
         {!isCollapsed && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Knowledge Base</SidebarGroupLabel>
+          <SidebarGroup className="p-0 mt-4">
+            <SidebarGroupLabel className="text-xs px-2 mb-2">
+              Knowledge Base
+            </SidebarGroupLabel>
             <SidebarGroupContent>
-              <div className="px-2">
-                <FileUploadZone />
-              </div>
+              <FileUploadZone />
             </SidebarGroupContent>
           </SidebarGroup>
         )}
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border">
+      <SidebarFooter className="p-2 border-t">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="flex items-center gap-2 p-2 justify-center">
-              <Settings className="w-4 h-4 flex-shrink-0" />
+            <SidebarMenuButton className="h-8 justify-center">
+              <Settings className="w-4 h-4" />
               {!isCollapsed && (
-                <span className="text-sm">Settings</span>
+                <span className="text-sm ml-2">Settings</span>
               )}
             </SidebarMenuButton>
           </SidebarMenuItem>

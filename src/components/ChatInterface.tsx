@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -127,7 +128,7 @@ export const ChatInterface = () => {
           onNewChat={handleNewChat}
         />
         
-        <div className="flex-1 flex flex-col min-h-screen">
+        <SidebarInset className="flex flex-col">
           {/* Header */}
           <div className="border-b border-border bg-gradient-card p-4">
             <div className="flex items-center justify-between">
@@ -228,7 +229,7 @@ export const ChatInterface = () => {
               </>
             )}
           </div>
-        </div>
+        </SidebarInset>
       </div>
     </SidebarProvider>
   );

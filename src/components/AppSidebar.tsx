@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   MessageSquare, 
@@ -101,35 +100,40 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
       </SidebarHeader>
 
       <SidebarContent>
-        {/* Chats Section */}
+        {/* New Chat Button - Always visible */}
         <SidebarGroup>
-          <div className="flex items-center justify-between px-2">
-            <SidebarGroupLabel>
-              {!isCollapsed ? "Conversations" : ""}
-            </SidebarGroupLabel>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onNewChat}
-              className="h-6 w-6 p-0 hover:bg-primary/10"
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
-          </div>
-          
           <SidebarGroupContent>
-            <ScrollArea className="h-64">
-              <SidebarMenu>
-                {chats.map((chat) => (
-                <SidebarMenuItem key={chat.id}>
-                  <div className="group/menu-item relative">
-                    <SidebarMenuButton
-                      isActive={currentChatId === chat.id}
-                      onClick={() => onChatSelect(chat.id)}
-                      className="flex items-center gap-2 p-2 w-full"
-                    >
-                      <MessageSquare className="w-4 h-4 flex-shrink-0" />
-                      {!isCollapsed && (
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={onNewChat}
+                  className="flex items-center gap-2 p-2 w-full justify-center"
+                >
+                  <Plus className="w-4 h-4" />
+                  {!isCollapsed && <span>New Chat</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Chats Section - Hidden when collapsed */}
+        {!isCollapsed && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Conversations</SidebarGroupLabel>
+            
+            <SidebarGroupContent>
+              <ScrollArea className="h-64">
+                <SidebarMenu>
+                  {chats.map((chat) => (
+                  <SidebarMenuItem key={chat.id}>
+                    <div className="group/menu-item relative">
+                      <SidebarMenuButton
+                        isActive={currentChatId === chat.id}
+                        onClick={() => onChatSelect(chat.id)}
+                        className="flex items-center gap-2 p-2 w-full"
+                      >
+                        <MessageSquare className="w-4 h-4 flex-shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium truncate">
@@ -148,9 +152,7 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
                             </Badge>
                           </div>
                         </div>
-                      )}
-                    </SidebarMenuButton>
-                    {!isCollapsed && (
+                      </SidebarMenuButton>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -172,42 +174,32 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    )}
-                  </div>
-                </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </ScrollArea>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                    </div>
+                  </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </ScrollArea>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
-        {/* Knowledge Base Section */}
-        <SidebarGroup>
-          <SidebarGroupLabel>
-            {!isCollapsed ? "Knowledge Base" : ""}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            {!isCollapsed ? (
+        {/* Knowledge Base Section - Hidden when collapsed */}
+        {!isCollapsed && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Knowledge Base</SidebarGroupLabel>
+            <SidebarGroupContent>
               <div className="px-2">
                 <FileUploadZone />
               </div>
-            ) : (
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton className="flex items-center justify-center">
-                    <Upload className="w-4 h-4" />
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            )}
-          </SidebarGroupContent>
-        </SidebarGroup>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="flex items-center gap-2 p-2">
+            <SidebarMenuButton className="flex items-center gap-2 p-2 justify-center">
               <Settings className="w-4 h-4 flex-shrink-0" />
               {!isCollapsed && (
                 <span className="text-sm">Settings</span>

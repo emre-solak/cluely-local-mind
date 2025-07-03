@@ -1,13 +1,14 @@
+
 import { useState } from "react";
 import { 
   MessageSquare, 
   Plus, 
   Upload, 
-  FileText, 
   Settings, 
   Trash2,
   MoreHorizontal,
-  Edit2
+  Edit2,
+  PanelLeft
 } from "lucide-react";
 import {
   Sidebar,
@@ -19,11 +20,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  SidebarFooter,
+  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   DropdownMenu,
@@ -91,6 +93,7 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
     <Sidebar className={isCollapsed ? "w-14" : "w-80"} collapsible="icon">
       <SidebarHeader className="border-b border-border">
         <div className="flex items-center justify-between p-2">
+          <SidebarTrigger className="h-8 w-8 hover:bg-primary/10" />
           {!isCollapsed && (
             <h1 className="text-lg font-semibold text-foreground">Local AI</h1>
           )}
@@ -158,7 +161,7 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
                             <MoreHorizontal className="w-3 h-3" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="bg-background border">
                           <DropdownMenuItem>
                             <Edit2 className="w-4 h-4 mr-2" />
                             Rename
@@ -200,6 +203,19 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-border">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton className="flex items-center gap-2 p-2">
+              <Settings className="w-4 h-4 flex-shrink-0" />
+              {!isCollapsed && (
+                <span className="text-sm">Settings</span>
+              )}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -6,9 +6,11 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { Send, Bot, User, Sparkles, FileText, Clock } from "lucide-react";
 import { MessageBubble } from "./MessageBubble";
 import { ContextPanel } from "./ContextPanel";
+import { ChatSidebar } from "./ChatSidebar";
 
 export interface Message {
   id: string;
@@ -36,6 +38,7 @@ export const ChatInterface = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showContext, setShowContext] = useState(false);
+  const [currentChatId, setCurrentChatId] = useState<string>("1");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -89,14 +92,43 @@ export const ChatInterface = () => {
     }
   };
 
+  const handleChatSelect = (chatId: string) => {
+    setCurrentChatId(chatId);
+    // Here you would load the messages for the selected chat
+    // For now, we'll just show a placeholder message
+    setMessages([{
+      id: "welcome",
+      content: `Switched to chat ${chatId}. This would load the conversation history.`,
+      role: "assistant",
+      timestamp: new Date(),
+    }]);
+  };
+
+  const handleNewChat = () => {
+    const newChatId = Date.now().toString();
+    setCurrentChatId(newChatId);
+    setMessages([{
+      id: "welcome",
+      content: "Hello! I'm your local AI assistant. Upload documents and I'll help you find information, answer questions, and analyze your files. What would you like to know?",
+      role: "assistant",
+      timestamp: new Date(),
+    }]);
+  };
+
   return (
-    <div className="flex h-screen bg-background">
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+    <div className="flex h-screen w-full bg-background">
+      <ChatSidebar 
+        currentChatId={currentChatId}
+        onChatSelect={handleChatSelect}
+        onNewChat={handleNewChat}
+      />
+      
+      <SidebarInset className="flex-1">
         {/* Header */}
         <div className="border-b border-border bg-gradient-card p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
+              <SidebarTrigger className="hover:bg-primary/10" />
               <div className="w-10 h-10 rounded-lg bg-gradient-neural flex items-center justify-center">
                 <Bot className="w-6 h-6 text-primary-foreground" />
               </div>
@@ -192,7 +224,7 @@ export const ChatInterface = () => {
             </>
           )}
         </div>
-      </div>
+      </SidebarInset>
     </div>
   );
 };

@@ -6,10 +6,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { Send, Bot, FileText, Clock } from "lucide-react";
+import { Send, Bot, FileText, Clock, Settings2 } from "lucide-react";
 import { MessageBubble } from "./MessageBubble";
 import { ContextPanel } from "./ContextPanel";
 import { AppSidebar } from "./AppSidebar";
+import { ObservationModeToggle } from "./ObservationModeToggle";
+import { LiveNudgeBox } from "./LiveNudgeBox";
+import { TranscriptStream } from "./TranscriptStream";
+import { PerformanceTipToast } from "./PerformanceTipToast";
+import { DebugMetrics } from "./DebugMetrics";
 
 export interface Message {
   id: string;
@@ -38,6 +43,9 @@ export const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showContext, setShowContext] = useState(false);
   const [currentChatId, setCurrentChatId] = useState<string>("1");
+  const [liveCopilotActive, setLiveCopilotActive] = useState(false);
+  const [showDebugMetrics, setShowDebugMetrics] = useState(false);
+  const [showLiveCopilot, setShowLiveCopilot] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -114,6 +122,11 @@ export const ChatInterface = () => {
     }]);
   };
 
+  const handleObservationModeChange = (mode: "live" | "periodic" | "off") => {
+    setLiveCopilotActive(mode !== "off");
+    console.log(`Live copilot mode changed to: ${mode}`);
+  };
+
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full bg-background">
@@ -148,9 +161,29 @@ export const ChatInterface = () => {
                   <FileText className="w-4 h-4 mr-2" />
                   Context
                 </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowLiveCopilot(!showLiveCopilot)}
+                >
+                  <Settings2 className="w-4 h-4 mr-2" />
+                  Live Copilot
+                </Button>
               </div>
             </div>
           </div>
+
+          {/* Live Copilot Panel */}
+          {showLiveCopilot && (
+            <>
+              <div className="border-b border-border bg-muted/30 p-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <ObservationModeToggle onModeChange={handleObservationModeChange} />
+                  <TranscriptStream isActive={liveCopilotActive} />
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Messages Area */}
           <div className="flex-1 flex min-h-0">
@@ -209,6 +242,14 @@ export const ChatInterface = () => {
                       <Clock className="w-3 h-3" />
                       Ready
                     </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-auto p-1 text-xs"
+                      onClick={() => setShowDebugMetrics(!showDebugMetrics)}
+                    >
+                      Debug
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -223,6 +264,11 @@ export const ChatInterface = () => {
             )}
           </div>
         </SidebarInset>
+
+        {/* Floating UI Components */}
+        <LiveNudgeBox isActive={liveCopilotActive} position="bottom-right" />
+        <PerformanceTipToast isActive={liveCopilotActive} position="top-center" />
+        <DebugMetrics visible={showDebugMetrics} onToggleVisibility={setShowDebugMetrics} />
       </div>
     </SidebarProvider>
   );

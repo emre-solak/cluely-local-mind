@@ -8,7 +8,6 @@ import {
   Globe,
   Shield,
   Database,
-  X,
   ChevronRight
 } from "lucide-react";
 import {
@@ -166,7 +165,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                         placeholder="e.g., Straight To The Point, Value Provider, No BS. Take a forward-thinking view. You're not a hypeman..."
                         value={customInstructionsText}
                         onChange={(e) => setCustomInstructionsText(e.target.value)}
-                        className="min-h-32"
+                        className="min-h-32 resize-none"
                       />
                     </div>
                   )}
@@ -194,7 +193,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     placeholder="Describe the personality traits you'd like Local AI to have..."
                     value={personalityTraits}
                     onChange={(e) => setPersonalityTraits(e.target.value)}
-                    className="min-h-24"
+                    className="min-h-24 resize-none"
                   />
                 </div>
 
@@ -204,7 +203,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     placeholder="Interests, values, or preferences to keep in mind"
                     value={additionalInfo}
                     onChange={(e) => setAdditionalInfo(e.target.value)}
-                    className="min-h-24"
+                    className="min-h-24 resize-none"
                   />
                 </div>
 
@@ -378,7 +377,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl h-[85vh] p-0 gap-0">
+      <DialogContent className="max-w-4xl h-[85vh] p-0 gap-0 [&>button]:hidden">
         <div className="flex h-full">
           {/* Sidebar */}
           <div className="w-64 bg-muted/30 border-r flex flex-col">
@@ -409,8 +408,8 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           </div>
 
           {/* Content */}
-          <div className="flex-1 flex flex-col">
-            <div className="p-6 border-b bg-background">
+          <div className="flex-1 flex flex-col min-w-0">
+            <div className="p-6 border-b bg-background flex-shrink-0">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">
                   {settingsCategories.find(c => c.id === activeCategory)?.label}
@@ -421,11 +420,12 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                   onClick={() => onOpenChange(false)}
                   className="h-8 w-8 p-0"
                 >
-                  <X className="w-4 h-4" />
+                  <span className="sr-only">Close</span>
+                  ✕
                 </Button>
               </div>
             </div>
-            <ScrollArea className="flex-1">
+            <ScrollArea className="flex-1 min-h-0">
               <div className="p-6">
                 {renderContent()}
               </div>

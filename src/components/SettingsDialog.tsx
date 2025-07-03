@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Settings, 
@@ -135,7 +134,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
       case "personalization":
         return (
-          <div className="space-y-8">
+          <div className="space-y-8 max-w-none">
             <div>
               <h3 className="text-lg font-semibold mb-4">Customize Local AI</h3>
               <p className="text-sm text-muted-foreground mb-6">
@@ -165,7 +164,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                         placeholder="e.g., Straight To The Point, Value Provider, No BS. Take a forward-thinking view. You're not a hypeman..."
                         value={customInstructionsText}
                         onChange={(e) => setCustomInstructionsText(e.target.value)}
-                        className="min-h-32 resize-none"
+                        className="min-h-32 resize-none w-full max-w-full"
                       />
                     </div>
                   )}
@@ -177,6 +176,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     placeholder="Enter your preferred name"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
+                    className="max-w-full"
                   />
                 </div>
 
@@ -184,6 +184,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                   <label className="text-sm font-medium">What do you do?</label>
                   <Input 
                     placeholder="e.g., Software Developer, Student, etc."
+                    className="max-w-full"
                   />
                 </div>
 
@@ -193,7 +194,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     placeholder="Describe the personality traits you'd like Local AI to have..."
                     value={personalityTraits}
                     onChange={(e) => setPersonalityTraits(e.target.value)}
-                    className="min-h-24 resize-none"
+                    className="min-h-24 resize-none w-full max-w-full"
                   />
                 </div>
 
@@ -203,7 +204,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     placeholder="Interests, values, or preferences to keep in mind"
                     value={additionalInfo}
                     onChange={(e) => setAdditionalInfo(e.target.value)}
-                    className="min-h-24 resize-none"
+                    className="min-h-24 resize-none w-full max-w-full"
                   />
                 </div>
 

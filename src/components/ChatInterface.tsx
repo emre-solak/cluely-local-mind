@@ -120,14 +120,14 @@ export const ChatInterface = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-background">
         <AppSidebar 
           currentChatId={currentChatId}
           onChatSelect={handleChatSelect}
           onNewChat={handleNewChat}
         />
         
-        <SidebarInset>
+        <div className="flex-1 flex flex-col min-h-screen">
           {/* Header */}
           <div className="border-b border-border bg-gradient-card p-4">
             <div className="flex items-center justify-between">
@@ -228,7 +228,7 @@ export const ChatInterface = () => {
               </>
             )}
           </div>
-        </SidebarInset>
+        </div>
       </div>
     </SidebarProvider>
   );

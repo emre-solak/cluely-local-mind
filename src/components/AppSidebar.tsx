@@ -118,11 +118,12 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
             <ScrollArea className="h-64">
               <SidebarMenu>
                 {chats.map((chat) => (
-                  <SidebarMenuItem key={chat.id}>
+                <SidebarMenuItem key={chat.id}>
+                  <div className="group/menu-item relative">
                     <SidebarMenuButton
                       isActive={currentChatId === chat.id}
                       onClick={() => onChatSelect(chat.id)}
-                      className="flex items-center gap-2 p-2"
+                      className="flex items-center gap-2 p-2 w-full"
                     >
                       <MessageSquare className="w-4 h-4 flex-shrink-0" />
                       {!isCollapsed && (
@@ -131,33 +132,9 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
                             <span className="text-sm font-medium truncate">
                               {chat.title}
                             </span>
-                            <div className="flex items-center gap-1">
-                              <span className="text-xs text-muted-foreground">
-                                {formatTimestamp(chat.timestamp)}
-                              </span>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-6 w-6 p-0 opacity-0 group-hover/menu-item:opacity-100"
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    <MoreHorizontal className="w-3 h-3" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem>
-                                    <Edit2 className="w-4 h-4 mr-2" />
-                                    Rename
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem className="text-destructive">
-                                    <Trash2 className="w-4 h-4 mr-2" />
-                                    Delete
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
+                            <span className="text-xs text-muted-foreground ml-2">
+                              {formatTimestamp(chat.timestamp)}
+                            </span>
                           </div>
                           <p className="text-xs text-muted-foreground truncate">
                             {chat.lastMessage}
@@ -170,7 +147,31 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
                         </div>
                       )}
                     </SidebarMenuButton>
-                  </SidebarMenuItem>
+                    {!isCollapsed && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="absolute right-1 top-1 h-6 w-6 p-0 opacity-0 group-hover/menu-item:opacity-100"
+                          >
+                            <MoreHorizontal className="w-3 h-3" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>
+                            <Edit2 className="w-4 h-4 mr-2" />
+                            Rename
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive">
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                  </div>
+                </SidebarMenuItem>
                 ))}
               </SidebarMenu>
             </ScrollArea>

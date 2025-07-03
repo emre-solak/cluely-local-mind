@@ -59,7 +59,11 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
         return <FileUploadZone />;
       
       case "integrations":
-        return <IntegrationsSection />;
+        return (
+          <div className="h-full overflow-hidden">
+            <IntegrationsSection />
+          </div>
+        );
       
       case "general":
         return (
@@ -384,7 +388,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl h-[85vh] p-0 gap-0 [&>button]:hidden">
+      <DialogContent className="max-w-4xl h-[85vh] p-0 gap-0 [&>button]:hidden overflow-hidden">
         <div className="flex h-full">
           {/* Sidebar */}
           <div className="w-64 bg-muted/30 border-r flex flex-col">
@@ -415,7 +419,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           </div>
 
           {/* Content */}
-          <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
             <div className="p-6 border-b bg-background flex-shrink-0">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">
@@ -432,11 +436,13 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                 </Button>
               </div>
             </div>
-            <ScrollArea className="flex-1 min-h-0">
-              <div className="p-6">
-                {renderContent()}
-              </div>
-            </ScrollArea>
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <ScrollArea className="h-full">
+                <div className="p-6">
+                  {renderContent()}
+                </div>
+              </ScrollArea>
+            </div>
           </div>
         </div>
       </DialogContent>

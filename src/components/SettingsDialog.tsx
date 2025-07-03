@@ -7,6 +7,7 @@ import {
   Globe,
   Shield,
   Database,
+  Plug,
   ChevronRight
 } from "lucide-react";
 import {
@@ -22,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FileUploadZone } from "./FileUploadZone";
+import { IntegrationsSection } from "./IntegrationsSection";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -34,6 +36,7 @@ const settingsCategories = [
   { id: "personalization", label: "Personalization", icon: Palette },
   { id: "language", label: "Language", icon: Globe },
   { id: "knowledge", label: "Knowledge Base", icon: Database },
+  { id: "integrations", label: "Integrations", icon: Plug },
   { id: "security", label: "Security", icon: Shield },
   { id: "account", label: "Account", icon: User },
 ];
@@ -54,6 +57,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     switch (activeCategory) {
       case "knowledge":
         return <FileUploadZone />;
+      
+      case "integrations":
+        return <IntegrationsSection />;
       
       case "general":
         return (

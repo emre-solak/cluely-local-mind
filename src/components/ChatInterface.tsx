@@ -132,7 +132,7 @@ export const ChatInterface = () => {
           <div className="border-b border-border bg-gradient-card p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <SidebarTrigger />
+                <SidebarTrigger className="hover:bg-primary/10" />
                 <div className="w-10 h-10 rounded-lg bg-gradient-neural flex items-center justify-center">
                   <Bot className="w-6 h-6 text-primary-foreground" />
                 </div>

@@ -4,7 +4,12 @@ import {
   MessageSquare, 
   Plus, 
   Settings, 
-  PanelLeft
+  PanelLeft,
+  User,
+  Moon,
+  Bell,
+  HelpCircle,
+  LogOut
 } from "lucide-react";
 import {
   Sidebar,
@@ -22,8 +27,12 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import { FileUploadZone } from "./FileUploadZone";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface Chat {
   id: string;
@@ -42,6 +51,7 @@ interface AppSidebarProps {
 export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSidebarProps) {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const [chats] = useState<Chat[]>([
     {
@@ -133,9 +143,6 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
                           <p className="text-xs text-muted-foreground truncate">
                             {chat.lastMessage}
                           </p>
-                          <Badge variant="secondary" className="text-xs mt-1">
-                            {chat.messageCount}
-                          </Badge>
                         </div>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -162,12 +169,40 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
       <SidebarFooter className="p-2 border-t">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="h-8 justify-center">
-              <Settings className="w-4 h-4" />
+            <Collapsible open={settingsOpen} onOpenChange={setSettingsOpen}>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton className="h-8 justify-center">
+                  <Settings className="w-4 h-4" />
+                  {!isCollapsed && (
+                    <span className="text-sm ml-2">Settings</span>
+                  )}
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
               {!isCollapsed && (
-                <span className="text-sm ml-2">Settings</span>
+                <CollapsibleContent className="ml-6 mt-1 space-y-1">
+                  <SidebarMenuButton className="h-7 text-xs">
+                    <User className="w-3 h-3" />
+                    <span className="ml-2">Profile</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuButton className="h-7 text-xs">
+                    <Moon className="w-3 h-3" />
+                    <span className="ml-2">Theme</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuButton className="h-7 text-xs">
+                    <Bell className="w-3 h-3" />
+                    <span className="ml-2">Notifications</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuButton className="h-7 text-xs">
+                    <HelpCircle className="w-3 h-3" />
+                    <span className="ml-2">Help</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuButton className="h-7 text-xs text-red-600 hover:text-red-700">
+                    <LogOut className="w-3 h-3" />
+                    <span className="ml-2">Sign Out</span>
+                  </SidebarMenuButton>
+                </CollapsibleContent>
               )}
-            </SidebarMenuButton>
+            </Collapsible>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

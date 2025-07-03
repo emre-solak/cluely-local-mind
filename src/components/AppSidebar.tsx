@@ -88,7 +88,7 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
   };
 
   return (
-    <Sidebar className={isCollapsed ? "w-14" : "w-80"} collapsible="offcanvas">
+    <Sidebar className={isCollapsed ? "w-14" : "w-80"} collapsible="icon">
       <SidebarHeader className="border-b border-border">
         <div className="flex items-center justify-between p-2">
           {!isCollapsed && (

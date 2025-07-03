@@ -29,10 +29,11 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FileUploadZone } from "./FileUploadZone";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Chat {
   id: string;
@@ -90,122 +91,129 @@ export function AppSidebar({ currentChatId, onChatSelect, onNewChat }: AppSideba
   };
 
   return (
-    <Sidebar className={isCollapsed ? "w-12" : "w-64"} collapsible="icon">
-      <SidebarHeader className="p-3 border-b">
-        <div className="flex items-center gap-2">
-          <SidebarTrigger className="h-6 w-6" />
+    <>
+      <Sidebar className={isCollapsed ? "w-12" : "w-64"} collapsible="icon">
+        <SidebarHeader className="p-3 border-b">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger className="h-6 w-6" />
+            {!isCollapsed && (
+              <h1 className="text-sm font-semibold">Local AI</h1>
+            )}
+          </div>
+        </SidebarHeader>
+
+        <SidebarContent className="p-2">
+          {/* New Chat Button */}
+          <div className="mb-3">
+            <Button
+              onClick={onNewChat}
+              className="w-full h-8 text-sm"
+              size="sm"
+            >
+              <Plus className="w-3 h-3" />
+              {!isCollapsed && <span className="ml-1">New Chat</span>}
+            </Button>
+          </div>
+
+          {/* Chat History */}
           {!isCollapsed && (
-            <h1 className="text-sm font-semibold">Local AI</h1>
-          )}
-        </div>
-      </SidebarHeader>
-
-      <SidebarContent className="p-2">
-        {/* New Chat Button */}
-        <div className="mb-3">
-          <Button
-            onClick={onNewChat}
-            className="w-full h-8 text-sm"
-            size="sm"
-          >
-            <Plus className="w-3 h-3" />
-            {!isCollapsed && <span className="ml-1">New Chat</span>}
-          </Button>
-        </div>
-
-        {/* Chat History */}
-        {!isCollapsed && (
-          <SidebarGroup className="p-0">
-            <SidebarGroupLabel className="text-xs px-2 mb-2">
-              Recent Chats
-            </SidebarGroupLabel>
-            
-            <SidebarGroupContent>
-              <ScrollArea className="h-48">
-                <SidebarMenu className="space-y-1">
-                  {chats.map((chat) => (
-                    <SidebarMenuItem key={chat.id}>
-                      <SidebarMenuButton
-                        isActive={currentChatId === chat.id}
-                        onClick={() => onChatSelect(chat.id)}
-                        className="p-2 h-auto"
-                      >
-                        <MessageSquare className="w-3 h-3 flex-shrink-0" />
-                        <div className="flex-1 min-w-0 text-left">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-medium truncate">
-                              {chat.title}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {formatTimestamp(chat.timestamp)}
-                            </span>
+            <SidebarGroup className="p-0">
+              <SidebarGroupLabel className="text-xs px-2 mb-2">
+                Recent Chats
+              </SidebarGroupLabel>
+              
+              <SidebarGroupContent>
+                <ScrollArea className="h-48">
+                  <SidebarMenu className="space-y-1">
+                    {chats.map((chat) => (
+                      <SidebarMenuItem key={chat.id}>
+                        <SidebarMenuButton
+                          isActive={currentChatId === chat.id}
+                          onClick={() => onChatSelect(chat.id)}
+                          className="p-2 h-auto"
+                        >
+                          <MessageSquare className="w-3 h-3 flex-shrink-0" />
+                          <div className="flex-1 min-w-0 text-left">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs font-medium truncate">
+                                {chat.title}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {formatTimestamp(chat.timestamp)}
+                              </span>
+                            </div>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {chat.lastMessage}
+                            </p>
                           </div>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {chat.lastMessage}
-                          </p>
-                        </div>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </ScrollArea>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </ScrollArea>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
 
-        {/* Knowledge Base */}
-        {!isCollapsed && (
-          <SidebarGroup className="p-0 mt-4">
-            <SidebarGroupLabel className="text-xs px-2 mb-2">
-              Knowledge Base
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <FileUploadZone />
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-      </SidebarContent>
+          {/* Knowledge Base */}
+          {!isCollapsed && (
+            <SidebarGroup className="p-0 mt-4">
+              <SidebarGroupLabel className="text-xs px-2 mb-2">
+                Knowledge Base
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <FileUploadZone />
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
+        </SidebarContent>
 
-      <SidebarFooter className="p-2 border-t">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Collapsible open={settingsOpen} onOpenChange={setSettingsOpen}>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton className="h-8 justify-center">
-                  <Settings className="w-4 h-4" />
-                  {!isCollapsed && (
-                    <span className="text-sm ml-2">Settings</span>
-                  )}
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              {!isCollapsed && (
-                <CollapsibleContent className="ml-6 mt-1 space-y-1">
-                  <SidebarMenuButton className="h-7 text-xs">
-                    <User className="w-3 h-3" />
-                    <span className="ml-2">Profile</span>
-                  </SidebarMenuButton>
-                  <SidebarMenuButton className="h-7 text-xs">
-                    <Moon className="w-3 h-3" />
-                    <span className="ml-2">Theme</span>
-                  </SidebarMenuButton>
-                  <SidebarMenuButton className="h-7 text-xs">
-                    <Bell className="w-3 h-3" />
-                    <span className="ml-2">Notifications</span>
-                  </SidebarMenuButton>
-                  <SidebarMenuButton className="h-7 text-xs">
-                    <HelpCircle className="w-3 h-3" />
-                    <span className="ml-2">Help</span>
-                  </SidebarMenuButton>
-                  <SidebarMenuButton className="h-7 text-xs text-red-600 hover:text-red-700">
-                    <LogOut className="w-3 h-3" />
-                    <span className="ml-2">Sign Out</span>
-                  </SidebarMenuButton>
-                </CollapsibleContent>
-              )}
-            </Collapsible>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+        <SidebarFooter className="p-2 border-t">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className="h-8 justify-center"
+                onClick={() => setSettingsOpen(true)}
+              >
+                <Settings className="w-4 h-4" />
+                {!isCollapsed && (
+                  <span className="text-sm ml-2">Settings</span>
+                )}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+
+      <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Button variant="ghost" className="w-full justify-start h-10">
+              <User className="w-4 h-4 mr-3" />
+              Profile
+            </Button>
+            <Button variant="ghost" className="w-full justify-start h-10">
+              <Moon className="w-4 h-4 mr-3" />
+              Theme
+            </Button>
+            <Button variant="ghost" className="w-full justify-start h-10">
+              <Bell className="w-4 h-4 mr-3" />
+              Notifications
+            </Button>
+            <Button variant="ghost" className="w-full justify-start h-10">
+              <HelpCircle className="w-4 h-4 mr-3" />
+              Help
+            </Button>
+            <Button variant="ghost" className="w-full justify-start h-10 text-red-600 hover:text-red-700 hover:bg-red-50">
+              <LogOut className="w-4 h-4 mr-3" />
+              Sign Out
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
